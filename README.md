@@ -1,5 +1,6 @@
 # negative-augmentation
-__Unofficial__ implement of negative augmentations in "Understanding and Improving Robustness of Vision Transformers through Patch-based Negative Augmentation"
+__Unofficial__ implement of negative augmentations in "Understanding and Improving Robustness of Vision Transformers through Patch-based Negative Augmentation" \
+arXiv to original paper (NeurIPS2022): __[link](https://arxiv.org/pdf/2110.07858.pdf)__
 
 ## Arguments
 If you want to check whole arguments when it comes to argparse, please open 3 py files (p-shuffle.py, p-rotate.py, and p-infill.py), and see some lines starting with parser below ```if __name__=="__main__"```
