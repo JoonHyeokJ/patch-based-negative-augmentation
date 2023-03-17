@@ -66,20 +66,23 @@ if __name__=='__main__':
     import argparse
     
     parser = argparse.ArgumentParser(description='testing p-rotate')
+    parser.add_argument('--resize', default=640, type=int)
+    parser.add_argument('--patch_size', default=32, type=int)
     parser.add_argument('--img_path', default='./1538130_3.jpg')
     parser.add_argument('--save_dir', default='./runs/p-rotate')
+    parser.add_argument('--result_name', default='result.jpg')
     
     args = parser.parse_args()
     print(args)
     
     transform = transforms.Compose([transforms.PILToTensor(),
-                                    transforms.Resize((748, 748)),
-                                    P_Rotate(68),
+                                    transforms.Resize((args.resize, args.resize)),
+                                    P_Rotate(args.patch_size),
                                     transforms.ToPILImage()])
     
     img = Image.open(args.img_path)
     img_trans = transform(img)
     
     os.makedirs(args.save_dir, exist_ok=True)
-    img_trans.save(os.path.join(args.save_dir, 'result.jpg'))
+    img_trans.save(os.path.join(args.save_dir, args.result_name))
     

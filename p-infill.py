@@ -83,15 +83,17 @@ if __name__=='__main__':
     import argparse
     
     parser = argparse.ArgumentParser(description='testing p-infill')
+    parser.add_argument('--resize', default=640, type=int)
     parser.add_argument('--img_path', default='./1538130_3.jpg')
     parser.add_argument('--save_dir', default='./runs/p-infill')
     parser.add_argument('--replace_rate', type=float, default=0.25)
+    parser.add_argument('--result_name', default='result.jpg')
     
     args = parser.parse_args()
     print(args)
     
     transform = transforms.Compose([transforms.PILToTensor(),
-                                    transforms.Resize((752, 752)),
+                                    transforms.Resize((args.resize, args.resize)),
                                     P_Infill(args.replace_rate),
                                     transforms.ToPILImage()])
     
@@ -99,5 +101,5 @@ if __name__=='__main__':
     img_trans = transform(img)
     
     os.makedirs(os.path.join(args.save_dir, 'rep_rate{}'.format(args.replace_rate)), exist_ok=True)
-    img_trans.save(os.path.join(args.save_dir, 'rep_rate{}'.format(args.replace_rate), 'result.jpg'))
+    img_trans.save(os.path.join(args.save_dir, 'rep_rate{}'.format(args.replace_rate), args.result_name))
     
