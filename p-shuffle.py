@@ -53,7 +53,28 @@ def split_and_arrange_img(img, patch_size):
             single_patch = img[:, i*h_patch:(i+1)*h_patch, j*w_patch:(j+1)*w_patch]
             patches.append(single_patch)
     return patches, num_patch_vertical, num_patch_horizontal, h_patch, w_patch
-    
+
+class P_Shuffle_batch(nn.Module):
+    def __init__(self, patch_size):
+        super(P_Shuffle_batch, self).__init__()
+
+        self.patch_size = patch_size
+        self.shuffle = P_Shuffle_single_img(self.patch_size)
+
+    @torch.no_grad()
+    def forward(self, img: Tensor):
+        img = img.clone()
+        B, _, H, W = img.shape
+
+        temporal_list = []
+        for i, single_img in enumerate(img):
+            neg_aug_img = self.shuffle(single_img)
+            temporal_list.append(neg_aug_img)
+        # breakpoint()
+        neg_aug_batch = torch.stack(temporal_list, dim=0)
+
+        return neg_aug_batch
+
     
 if __name__=='__main__':
     import argparse

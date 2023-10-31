@@ -78,7 +78,30 @@ def split_and_arrange_img(img, patch_size):
             patches.append(single_patch)
     return patches, num_patch_vertical, num_patch_horizontal, h_patch, w_patch
     
-    
+
+class P_Infill_batch(nn.Module):
+    def __init__(self, replace_rate):
+        super(P_Infill_batch, self).__init__()
+
+        self.replace_rate = replace_rate
+        self.infill = P_Infill_single_img(self.replace_rate)
+
+    @torch.no_grad()
+    def forward(self, img: Tensor):
+        img = img.clone()
+        B, _, H, W = img.shape
+
+        temporal_list = []
+        for i, single_img in enumerate(img):
+            neg_aug_img = self.infill(single_img)
+            temporal_list.append(neg_aug_img)
+        # breakpoint()
+        neg_aug_batch = torch.stack(temporal_list, dim=0)
+
+        return neg_aug_batch
+
+
+
 if __name__=='__main__':
     import argparse
     
